@@ -1,0 +1,31 @@
+import bicis.*
+import deposito.*
+
+describe "test para deposito" {
+  const bici1 = new Bici(rodado = 28, largo = 150, marca = "Olmo", accesorios = [new Farolito()])
+  const bici2 = new Bici(rodado = 26, largo = 110, marca ="Legnano", accesorios = [new Farolito(), new Canasto(volumen = 8), new MorralDeBici(largo = 21, tieneOjoDeGato = true)])
+  const bici3 = new Bici(rodado = 20, largo = 90, marca = "Legnano", accesorios = [new MorralDeBici(largo = 6, tieneOjoDeGato = false)])
+  
+  const deposito1 = new Deposito(bicis = [bici1, bici2, bici3])
+  test "Las bicis rapidas son las dos primeras (rodado 28 y 26)" {
+    assert.equals([bici1,bici2], deposito1.bicisRapidas())
+  }
+  test "Las marcas son Olmo y Legnano" {
+    assert.equals(#{"Olmo", "Legnano"}, deposito1.marca())
+  }
+
+  test "El deposito no es nocturno (por la tercera bici)" {
+    assert.notThat(deposito1.esNocturno())
+  }
+  test "El deposito tiene una bici para llevar 10 kilos" {
+    assert.that(deposito1.bicicletaParaLlevar(10))
+  }
+  test "El deposito no tiene para llevar una bici de 50 kilos" {
+    assert.notThat(deposito1.bicicletaParaLlevar(50))
+  }
+  test "Un depósito que tenga solamente las dos primeras bicis, sí es nocturno." {
+    deposito1.bicis().remove(bici3)
+    assert.that(deposito1.esNocturno())
+  }
+}
+
